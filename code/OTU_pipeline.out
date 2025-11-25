@@ -1,0 +1,284 @@
+Workdir:  /proj/toband/bianca/workdir
+Input:    /proj/toband/bianca/reads/All_II.hifi_reads.fastq.gz
+================== FastQC 1 =======================
+application/gzip
+Started analysis of All_II.hifi_reads.fastq.gz
+Approx 5% complete for All_II.hifi_reads.fastq.gz
+Approx 10% complete for All_II.hifi_reads.fastq.gz
+Approx 15% complete for All_II.hifi_reads.fastq.gz
+Approx 20% complete for All_II.hifi_reads.fastq.gz
+Approx 25% complete for All_II.hifi_reads.fastq.gz
+Approx 30% complete for All_II.hifi_reads.fastq.gz
+Approx 35% complete for All_II.hifi_reads.fastq.gz
+Approx 40% complete for All_II.hifi_reads.fastq.gz
+Approx 45% complete for All_II.hifi_reads.fastq.gz
+Approx 50% complete for All_II.hifi_reads.fastq.gz
+Approx 55% complete for All_II.hifi_reads.fastq.gz
+Approx 60% complete for All_II.hifi_reads.fastq.gz
+Approx 65% complete for All_II.hifi_reads.fastq.gz
+Approx 70% complete for All_II.hifi_reads.fastq.gz
+Approx 75% complete for All_II.hifi_reads.fastq.gz
+Approx 80% complete for All_II.hifi_reads.fastq.gz
+Approx 85% complete for All_II.hifi_reads.fastq.gz
+Approx 90% complete for All_II.hifi_reads.fastq.gz
+Approx 95% complete for All_II.hifi_reads.fastq.gz
+Analysis complete for All_II.hifi_reads.fastq.gz
+===================================================
+============= 1. Trimming adapters ================
+================ with cutadapt ====================
+===================================================
+This is cutadapt 5.1 with Python 3.12.12
+Command line parameters: --cores 4 -a TCCGTAGGTGAACCTGC...CGAAGTTTCCCTCAGGA --revcomp --error-rate 0.1 --overlap 10 --no-indels --action=trim --discard-untrimmed -o /proj/toband/bianca/workdir/intermediate/cutadapt_trimmed_reads.fastq.gz /proj/toband/bianca/reads/All_II.hifi_reads.fastq.gz
+Processing single-end reads on 4 cores ...
+
+=== Summary ===
+
+Total reads processed:                  25,244
+Reads with adapters:                    25,235 (100.0%)
+Reverse-complemented:                   10,965 (43.4%)
+
+== Read fate breakdown ==
+Reads discarded as untrimmed:                9 (0.0%)
+Reads written (passing filters):        25,235 (100.0%)
+
+Total basepairs processed:    38,841,022 bp
+Total written (filtered):     37,913,143 bp (97.6%)
+
+=== Adapter 1 ===
+
+Sequence: TCCGTAGGTGAACCTGC...CGAAGTTTCCCTCAGGA; Type: linked; Length: 17+17; 5' trimmed: 24883 times; 3' trimmed: 24822 times; Reverse-complemented: 10965 times
+
+Minimum overlap: 10+10
+No. of allowed errors:
+1-9 bp: 0; 10-17 bp: 1
+
+No. of allowed errors:
+1-9 bp: 0; 10-17 bp: 1
+
+Overview of removed sequences at 5' end
+length	count	expect	max.err	error counts
+12	6	0.0	1	6
+13	8	0.0	1	7 1
+14	6	0.0	1	1 5
+15	2	0.0	1	2
+16	60	0.0	1	18 42
+17	24752	0.0	1	24659 93
+18	45	0.0	1	36 9
+19	2	0.0	1	2
+55	1	0.0	1	1
+1549	1	0.0	1	1
+
+
+
+Overview of removed sequences at 3' end
+length	count	expect	max.err	error counts
+11	1	0.0	1	1
+12	1	0.0	1	1
+13	8	0.0	1	6 2
+14	11	0.0	1	6 5
+15	13	0.0	1	11 2
+16	45	0.0	1	6 39
+17	24682	0.0	1	24543 139
+18	16	0.0	1	7 9
+23	1	0.0	1	1
+1006	1	0.0	1	1
+1026	1	0.0	1	1
+1027	1	0.0	1	1
+1029	1	0.0	1	1
+1398	1	0.0	1	1
+1437	1	0.0	1	1
+1443	1	0.0	1	1
+1494	1	0.0	1	1
+1507	1	0.0	1	1
+1511	1	0.0	1	1
+1523	1	0.0	1	1
+1524	2	0.0	1	2
+1553	1	0.0	1	1
+1555	1	0.0	1	1
+1565	1	0.0	1	1
+1566	1	0.0	1	1
+1570	1	0.0	1	1
+1573	1	0.0	1	1
+1576	1	0.0	1	1
+1588	1	0.0	1	1
+1594	1	0.0	1	1
+1597	1	0.0	1	1
+1602	2	0.0	1	2
+1607	1	0.0	1	1
+1610	1	0.0	1	1
+1614	1	0.0	1	1
+1629	1	0.0	1	1
+1639	1	0.0	1	1
+1640	1	0.0	1	1
+1641	2	0.0	1	2
+1646	1	0.0	1	1
+1656	1	0.0	1	1
+1666	2	0.0	1	2
+1690	1	0.0	1	1
+1694	1	0.0	1	1
+1734	1	0.0	1	1
+1769	1	0.0	1	1
+1791	1	0.0	1	1
+1792	1	0.0	1	1
+2081	1	0.0	1	1
+================== FastQC 2 =======================
+application/gzip
+Started analysis of cutadapt_trimmed_reads.fastq.gz
+Approx 5% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 10% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 15% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 20% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 25% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 30% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 35% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 40% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 45% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 55% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 60% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 65% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 70% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 75% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 80% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 85% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 90% complete for cutadapt_trimmed_reads.fastq.gz
+Approx 95% complete for cutadapt_trimmed_reads.fastq.gz
+Analysis complete for cutadapt_trimmed_reads.fastq.gz
+===================================================
+============= 2.  Quality filtering ===============
+================== with vsearch ===================
+===================================================
+vsearch v2.30.1_linux_x86_64, 125.4GB RAM, 20 cores
+https://github.com/torognes/vsearch
+
+Reading input file 100%
+24307 sequences kept (of which 0 truncated), 928 sequences discarded.
+================== FastQC 3 =======================
+null
+Started analysis of q_filtered_reads.fastq
+Approx 5% complete for q_filtered_reads.fastq
+Approx 10% complete for q_filtered_reads.fastq
+Approx 15% complete for q_filtered_reads.fastq
+Approx 20% complete for q_filtered_reads.fastq
+Approx 25% complete for q_filtered_reads.fastq
+Approx 30% complete for q_filtered_reads.fastq
+Approx 35% complete for q_filtered_reads.fastq
+Approx 40% complete for q_filtered_reads.fastq
+Approx 45% complete for q_filtered_reads.fastq
+Approx 50% complete for q_filtered_reads.fastq
+Approx 55% complete for q_filtered_reads.fastq
+Approx 60% complete for q_filtered_reads.fastq
+Approx 65% complete for q_filtered_reads.fastq
+Approx 70% complete for q_filtered_reads.fastq
+Approx 75% complete for q_filtered_reads.fastq
+Approx 80% complete for q_filtered_reads.fastq
+Approx 85% complete for q_filtered_reads.fastq
+Approx 90% complete for q_filtered_reads.fastq
+Approx 95% complete for q_filtered_reads.fastq
+Analysis complete for q_filtered_reads.fastq
+===================================================
+====== 3. Deduplication. Abundance counting. ======
+================== with vsearch ===================
+===================================================
+vsearch v2.30.1_linux_x86_64, 125.4GB RAM, 20 cores
+https://github.com/torognes/vsearch
+
+Dereplicating file /proj/toband/bianca/workdir/intermediate/q_filtered_reads.fastq 100%
+36646683 nt in 24307 seqs, min 1004, max 2365, avg 1508
+Sorting 100%
+13928 unique sequences, avg cluster 1.7, median 0, max 3994
+Writing FASTQ output file 100%
+vsearch v2.30.1_linux_x86_64, 125.4GB RAM, 20 cores
+https://github.com/torognes/vsearch
+
+Reading file /proj/toband/bianca/workdir/intermediate/dereplicated_reads.fastq 100%
+21025066 nt in 13928 seqs, min 1004, max 2365, avg 1510
+Getting sizes 100%
+Sorting 100%
+Median abundance: 1
+Writing output 100%
+================== FastQC 4 =======================
+null
+Started analysis of dereplicated_reads.fastq
+Approx 5% complete for dereplicated_reads.fastq
+Approx 10% complete for dereplicated_reads.fastq
+Approx 20% complete for dereplicated_reads.fastq
+Approx 25% complete for dereplicated_reads.fastq
+Approx 35% complete for dereplicated_reads.fastq
+Approx 40% complete for dereplicated_reads.fastq
+Approx 50% complete for dereplicated_reads.fastq
+Approx 55% complete for dereplicated_reads.fastq
+Approx 60% complete for dereplicated_reads.fastq
+Approx 70% complete for dereplicated_reads.fastq
+Approx 75% complete for dereplicated_reads.fastq
+Approx 85% complete for dereplicated_reads.fastq
+Approx 90% complete for dereplicated_reads.fastq
+Analysis complete for dereplicated_reads.fastq
+===================================================
+============= 4. Chimera filtering ================
+================== with vsearch ===================
+===================================================
+vsearch v2.30.1_linux_x86_64, 125.4GB RAM, 20 cores
+https://github.com/torognes/vsearch
+
+Reading file /proj/toband/bianca/workdir/intermediate/sorted_dereplicated_reads.fasta 100%
+21025066 nt in 13928 seqs, min 1004, max 2365, avg 1510
+Masking 100%
+Sorting by abundance 100%
+Counting k-mers 100%
+Detecting chimeras 100%
+Found 6602 (47.4%) chimeras, 6989 (50.2%) non-chimeras,
+and 337 (2.4%) borderline sequences in 13928 unique sequences.
+Taking abundance information into account, this corresponds to
+7697 (31.7%) chimeras, 16121 (66.3%) non-chimeras,
+and 489 (2.0%) borderline sequences in 24307 total sequences.
+================== MultiQC =======================
+
+/// MultiQC 🔍 v1.31
+
+     version_check | MultiQC Version v1.32 now available!
+       file_search | Search path: /proj/toband/bianca/workdir/QC
+
+            fastqc | Found 4 reports
+
+     write_results | Data        : multiqc_data
+     write_results | Report      : multiqc_report.html
+           multiqc | MultiQC complete
+===================================================
+=========== 5. ITS region extraction ==============
+=================== with ITSx =====================
+===================================================
+ITSx -- Identifies ITS sequences and extracts the ITS region
+by Johan Bengtsson-Palme et al., University of Gothenburg
+Version: 1.1.3
+-----------------------------------------------------------------
+Wed Nov  5 13:17:43 2025 : Preparing HMM database (should be quick)...
+Wed Nov  5 13:17:43 2025 : Checking and handling input sequence data (should not take long)...
+Wed Nov  5 13:17:44 2025 : Doing paralellised comparison to HMM database (round 1 of 1)...
+    Wed Nov  5 13:26:36 2025 : Fungi analysis of main strand finished.
+    Wed Nov  5 13:34:20 2025 : Fungi analysis of complementary strand finished.
+Wed Nov  5 13:34:20 2025 : Parallel HMM-scan finished.
+Wed Nov  5 13:34:20 2025 : Analysing results of HMM-scan (this might take quite some time)...
+Wed Nov  5 13:34:31 2025 : Extraction finished!
+-----------------------------------------------------------------
+Thank you for using ITSx!
+Please report bugs or unsupported lineages to itsx@microbiology.se
+
+===================================================
+============ 6. Clustering into OTUs ==============
+================== with vsearch ===================
+===================================================
+vsearch v2.30.1_linux_x86_64, 125.4GB RAM, 20 cores
+https://github.com/torognes/vsearch
+
+Reading file /proj/toband/bianca/workdir/intermediate/ITSx_out.ITS2.full_and_partial.fasta 100%
+1393033 nt in 6911 seqs, min 71, max 821, avg 202
+Masking 100%
+Sorting by length 100%
+Counting k-mers 100%
+Clustering 100%
+Sorting clusters 100%
+Writing clusters 100%
+Clusters: 1005 Size min 1, max 2188, avg 6.9
+Singletons: 590, 8.5% of seqs, 58.7% of clusters
+Multiple alignments 100%
+Writing OTU table (biom 1.0) 100%
