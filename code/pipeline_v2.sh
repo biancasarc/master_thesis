@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH -A uppmax2025-2-64
 #SBATCH -p core
-#SBATCH -n 4
-#SBATCH -t 8:00:00
+#SBATCH -n 8
+#SBATCH -t 78:00:00
 #SBATCH -J OTU_pipeline
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user biancasarcani@gmail.com
@@ -12,17 +12,18 @@ set -euo pipefail
 
 ######## HANDLE ARGUMENTS ######## 
 
-WORKDIR=$1
-INPUTDIR=$2
+INPUTDIR=$1
+OUTPUTDIR=$2
 
 # Check if arguments are missing
-if [ -z "$WORKDIR" ] || [ -z "$INPUTDIR" ]; then
-    echo "Usage: sbatch pipeline.sh <workdir> <inputdir>"
+if [ -z "$OUTPUTDIR" ] || [ -z "$INPUTDIR" ]; then
+    echo "Usage: sbatch pipeline.sh <inputdir> <outputdir>"
     exit 1
 fi
 
-echo "Workdir:  $WORKDIR"
 echo "Input:    $INPUTDIR"
+echo "Output location:  $OUTPUTDIR"
+
 
 ############# CONDA ############# 
 
@@ -31,13 +32,26 @@ conda activate b_thesis_env
 
 
 # ============ File management ============
-
-cd "$WORKDIR" || { echo "Cannot enter $WORKDIR"; exit 1; }
+cd "$OUTPUTDIR"
+mkdir OTUs
 mkdir multiqc       #here will be one multiqc/sample, to show the progress of the processing
+
+cd "$TMPDIR"
+
 
 shopt -s nullglob   #stops pipeline from running if no files are found
 
+if ! ls "$INPUTDIR"/*.fastq.gz &>/dev/null; then
+    echo "ERROR: No FASTQ files found in $INPUTDIR"
+    exit 1
+fi
+
+
 for sample in "$INPUTDIR"/*.fastq.gz; do
+    cp "$sample" .
+done
+
+for sample in "$TMPDIR"/*.fastq.gz; do
 
     echo "Processing $sample"
 
@@ -52,14 +66,14 @@ for sample in "$INPUTDIR"/*.fastq.gz; do
 
     echo "================== FastQC 1 =======================" 
 
-    fastqc "$sample" -o "QC_${name}" -t 4
+    fastqc "$sample" -o "QC_${name}" -t 8
 
     echo "===================================================" 
     echo "============= 1. Trimming adapters ================" 
     echo "================ with cutadapt ===================="
     echo "===================================================" 
 
-    cutadapt --cores 4 \
+    cutadapt --cores 8 \
     -a TCCGTAGGTGAACCTGC...CGAAGTTTCCCTCAGGA \
     --revcomp \
     --error-rate 0.1 \
@@ -72,7 +86,7 @@ for sample in "$INPUTDIR"/*.fastq.gz; do
 
     echo "================== FastQC 2 =======================" 
 
-    fastqc "intermediate_${name}/01_trimmed_reads.fastq.gz" -o "QC_${name}" -t 4
+    fastqc "intermediate_${name}/01_trimmed_reads.fastq.gz" -o "QC_${name}" -t 8
 
     echo "===================================================" 
     echo "============= 2.  Quality filtering ===============" 
@@ -89,7 +103,7 @@ for sample in "$INPUTDIR"/*.fastq.gz; do
 
     echo "================== FastQC 3 =======================" 
 
-    fastqc "intermediate_${name}/02_q_filtered_reads.fastq" -o "QC_${name}" -t 4
+    fastqc "intermediate_${name}/02_q_filtered_reads.fastq" -o "QC_${name}" -t 8
 
     echo "===================================================" 
     echo "====== 3. Deduplication. Abundance counting. ======" 
@@ -107,12 +121,12 @@ for sample in "$INPUTDIR"/*.fastq.gz; do
     echo "================== FastQC 4 =======================" 
 
 
-    fastqc "intermediate_${name}/03_dereplicated_reads.fastq" -o "QC_${name}" -t 4
+    fastqc "intermediate_${name}/03_dereplicated_reads.fastq" -o "QC_${name}" -t 8
 
     echo "================== MultiQC =======================" 
 
     multiqc "QC_${name}" -o .
-    mv multiqc_report.html "multiqc/${name}_multiqc_report.html"   #moves and renames multiqc report to specified directory
+    mv multiqc_report.html "$OUTPUTDIR/multiqc/${name}_multiqc_report.html"   #moves and renames multiqc report to specified directory
     rm -r multiqc_data                  #removes intermediate file that multiqc creates automatically
 
     echo "===================================================" 
@@ -137,7 +151,7 @@ for sample in "$INPUTDIR"/*.fastq.gz; do
     -i "intermediate_${name}/nonchimeras.fasta" \
     -o "intermediate_${name}/ITSx_out" \
     -t F \
-    --cpu 4 \
+    --cpu 8 \
     -E 1e-2 \
     --partial 50 \
     --complement F \
@@ -162,12 +176,16 @@ for sample in "$INPUTDIR"/*.fastq.gz; do
     --centroids "${name}_OTU_centroids.fasta" \
     --consout "${name}_OTU_consensus.fasta" \
     --sizeout \
-    --threads 4 \
+    --threads 8 \
     --qmask dust 
 
+    cp "${name}_OTU_centroids.fasta" "$OUTPUTDIR/OTUs"
+    cp "${name}_OTU_consensus.fasta" "$OUTPUTDIR/OTUs" 
 
     echo "================== Removing intermediate directories =======================" 
 
     rm -r "intermediate_${name}"
     rm -r "QC_${name}"
 done
+
+
