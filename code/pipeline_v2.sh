@@ -34,7 +34,7 @@ conda activate b_thesis_env
 # ============ File management ============
 mkdir "$OUTPUTDIR/OTUs"
 mkdir "$OUTPUTDIR/multiqc"       #here will be one multiqc/sample, to show the progress of the processing
-
+mkdir "$OUTPUTDIR/retained_reads"
 
 cd "$TMPDIR"
 
@@ -161,7 +161,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
     --complement T \
     --save_regions ITS2
 
-
+    cp "intermediate_${name}/ITSx_out.ITS2.full_and_partial.fasta" "$OUTPUTDIR/retained_reads/${name}_ITS_full_and_partial.fasta"
 
     echo "===================================================" 
     echo "============ 6. Clustering into OTUs ==============" 
