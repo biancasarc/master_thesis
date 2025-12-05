@@ -32,9 +32,9 @@ conda activate b_thesis_env
 
 
 # ============ File management ============
-cd "$OUTPUTDIR"
-mkdir OTUs
-mkdir multiqc       #here will be one multiqc/sample, to show the progress of the processing
+mkdir "$OUTPUTDIR/OTUs"
+mkdir "$OUTPUTDIR/multiqc"       #here will be one multiqc/sample, to show the progress of the processing
+
 
 cd "$TMPDIR"
 
@@ -59,8 +59,8 @@ for sample in "$TMPDIR"/*.fastq.gz; do
 
     # ============ Internal directory management ============
 
-    mkdir "intermediate_${name}"
-    mkdir "QC_${name}"
+    mkdir "intermediate_${name}"          # temporary directory where all intermediate outputs are stored. This is stored in node's temporary memory
+    mkdir "QC_${name}"                    # temporary directory with all fastqcs
 
     ############# CODE ############## 
 
