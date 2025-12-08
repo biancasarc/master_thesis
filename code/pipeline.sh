@@ -2,7 +2,7 @@
 #SBATCH -A uppmax2025-2-64
 #SBATCH -p core
 #SBATCH -n 4
-#SBATCH -t 8:00:00
+#SBATCH -t 0:10:00
 #SBATCH -J OTU_pipeline
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user biancasarcani@gmail.com
@@ -12,17 +12,17 @@ set -euo pipefail
 
 ######## HANDLE ARGUMENTS ######## 
 
-WORKDIR=$1
-INPUTFILE=$2
+INPUTFILE=$1
+WORKDIR=$2
 
 # Check if arguments are missing
-if [ -z "$WORKDIR" ] || [ -z "$INPUTFILE" ]; then
-    echo "Usage: sbatch run_job.sh <workdir> <inputfile>"
+if [ -z "$INPUTFILE" ] || [ -z "$WORKDIR" ]; then
+    echo "Usage: sbatch pipeline.sh <inputfile> <workdir>"
     exit 1
 fi
 
-echo "Workdir:  $WORKDIR"
 echo "Input:    $INPUTFILE"
+echo "Workdir:  $WORKDIR"
 
 ############# CONDA ############# 
 
@@ -32,14 +32,14 @@ conda activate b_thesis_env
 # ============ File management ============
 
 cd "$WORKDIR" || { echo "Cannot enter $WORKDIR"; exit 1; }
-mkdir -p intermediate
-mkdir -p QC
+mkdir intermediate
+mkdir QC
 
 ############# CODE ############## 
 
 echo "================== FastQC 1 =======================" 
 
-fastqc "$INPUTFILE" -o "$WORKDIR/QC" -t 4
+fastqc "$INPUTFILE" -o QC/ -t 4
 
 echo "===================================================" 
 echo "============= 1. Trimming adapters ================" 
@@ -54,12 +54,12 @@ cutadapt --cores 4 \
   --no-indels \
   --action=trim \
   --discard-untrimmed \
-  -o "$WORKDIR/intermediate/cutadapt_trimmed_reads.fastq.gz" \
+  -o intermediate/01_trimmed_reads.fastq.gz \
   "$INPUTFILE"
 
 echo "================== FastQC 2 =======================" 
 
-fastqc "$WORKDIR/intermediate/cutadapt_trimmed_reads.fastq.gz" -o "$WORKDIR/QC" -t 4
+fastqc intermediate/01_trimmed_reads.fastq.gz -o QC/ -t 4
 
 echo "===================================================" 
 echo "============= 2.  Quality filtering ===============" 
@@ -67,16 +67,16 @@ echo "================== with vsearch ==================="
 echo "===================================================" 
 
 vsearch \
- --fastq_filter "$WORKDIR/intermediate/cutadapt_trimmed_reads.fastq.gz" \
+ --fastq_filter intermediate/01_trimmed_reads.fastq.gz \
  --fastq_maxee 12 \
  --fastq_minlen 1000 \
  --fastq_maxlen 2400 \
  --fastq_maxns 0 \
- --fastqout "$WORKDIR/intermediate/q_filtered_reads.fastq"
+ --fastqout intermediate/02_q_filtered_reads.fastq
 
 echo "================== FastQC 3 =======================" 
 
-fastqc "$WORKDIR/intermediate/q_filtered_reads.fastq" -o "$WORKDIR/QC" -t 4
+fastqc intermediate/02_q_filtered_reads.fastq -o QC/ -t 4
 
 echo "===================================================" 
 echo "====== 3. Deduplication. Abundance counting. ======" 
@@ -84,17 +84,17 @@ echo "================== with vsearch ==================="
 echo "===================================================" 
 
 vsearch \
- --fastx_uniques "$WORKDIR/intermediate/q_filtered_reads.fastq" \
+ --fastx_uniques intermediate/02_q_filtered_reads.fastq \
  --sizeout \
- --fastqout "$WORKDIR/intermediate/dereplicated_reads.fastq"
+ --fastqout intermediate/03_dereplicated_reads.fastq
 
-vsearch --sortbysize "$WORKDIR/intermediate/dereplicated_reads.fastq" --output "$WORKDIR/intermediate/sorted_dereplicated_reads.fasta"
+vsearch --sortbysize intermediate/03_dereplicated_reads.fastq --output intermediate/04_sorted_dereplicated_reads.fasta
 
 
 echo "================== FastQC 4 =======================" 
 
 
-fastqc "$WORKDIR/intermediate/dereplicated_reads.fastq" -o "$WORKDIR/QC" -t 4
+fastqc intermediate/03_dereplicated_reads.fastq -o QC/ -t 4
 
 echo "===================================================" 
 echo "============= 4. Chimera filtering ================" 
@@ -102,24 +102,24 @@ echo "================== with vsearch ==================="
 echo "===================================================" 
 
 vsearch \
- --uchime_denovo "$WORKDIR/intermediate/sorted_dereplicated_reads.fasta" \
- --nonchimeras "$WORKDIR/intermediate/nonchimeras.fasta" \
+ --uchime_denovo intermediate/04_sorted_dereplicated_reads.fasta \
+ --nonchimeras intermediate/nonchimeras.fasta \
  --abskew 2 \
  --mindiv 0.28 \
  --minh 0.28 
 
 echo "================== MultiQC =======================" 
 
-multiqc "$WORKDIR/QC" -o "$WORKDIR"
-
+multiqc QC/ -o .
+rm -r multiqc_data   #remove directory created automatically by MultiQC
 echo "===================================================" 
 echo "=========== 5. ITS region extraction ==============" 
 echo "=================== with ITSx ====================="
 echo "===================================================" 
 
 ITSx \
- -i "$WORKDIR/intermediate/nonchimeras.fasta" \
- -o "$WORKDIR/intermediate/ITSx_out" \
+ -i intermediate/nonchimeras.fasta \
+ -o intermediate/ITSx_out \
  -t F \
  --cpu 4 \
  -E 1e-2 \
@@ -139,15 +139,13 @@ echo "================== with vsearch ==================="
 echo "===================================================" 
 
 vsearch \
- --cluster_fast "$WORKDIR/intermediate/ITSx_out.ITS2.full_and_partial.fasta" \
- --biomout OTU_table.biom \
+ --cluster_fast intermediate/ITSx_out.ITS2.full_and_partial.fasta \
  --id 0.985 \
  --iddef 1 \
  --strand plus \
- --centroids "$WORKDIR/OTU_centroids.fasta" \
- --consout "$WORKDIR/OTU_consensus.fasta" \
+ --centroids OTU_centroids.fasta \
+ --consout OTU_consensus.fasta \
  --sizeout \
  --threads 4 \
  --qmask dust 
-
 

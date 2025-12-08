@@ -1,9 +1,0 @@
-vsearch v2.30.1_linux_x86_64, 125.4GB RAM, 20 cores
-https://github.com/torognes/vsearch
-
-Reading file /proj/toband/bianca/UNITE_db/prepared_UNITE_db.fasta 100%
-89716502 nt in 168030 seqs, min 140, max 3173, avg 534
-Counting k-mers 100%
-Creating k-mer index 100%
-Classifying sequences 100%
-Classified 1005 of 1005 sequences (100.00%)

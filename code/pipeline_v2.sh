@@ -154,7 +154,6 @@ for sample in "$TMPDIR"/*.fastq.gz; do
     --cpu 8 \
     -E 1e-2 \
     --partial 50 \
-    --complement F \
     --only_full T \
     --truncate T \
     --preserve T \
