@@ -24,7 +24,7 @@ Usage:
 ```
 sbatch pipeline_v2.sh <full/path/directory_with_samples> <full/path/empty_output_dir>
 ```
-
+---
 ## Output format
 ### Pipeline V1
 ```
