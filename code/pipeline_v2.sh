@@ -28,7 +28,7 @@ echo "Output location:  $OUTPUTDIR"
 ############# CONDA ############# 
 
 source /sw/apps/conda/latest/rackham_stage/etc/profile.d/conda.sh
-conda activate b_thesis_env
+conda activate /proj/toband/conda_envs/biancas_pipeline_env/env/b_thesis_env
 
 
 # ============ File management ============
