@@ -2,6 +2,7 @@
 #SBATCH -A uppmax2026-1-17
 #SBATCH -p pelle
 #SBATCH --ntasks=1
+#SBATCH -c 4q
 #SBATCH --cpus-per-task=4
 #SBATCH -t 4:00:00
 #SBATCH -J OTU_pipeline
@@ -68,6 +69,7 @@ echo "==================================================="
 
 vsearch \
  --fastq_filter intermediate/01_trimmed_reads.fastq.gz \
+ --fastq_qmax 93 \
  --fastq_maxee 12 \
  --fastq_minlen 1000 \
  --fastq_maxlen 2400 \

@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH -A uppmax2025-2-64
-#SBATCH -p core
-#SBATCH -n 8
+#SBATCH -A uppmax2026-1-17
+#SBATCH -p pelle
+#SBATCH --ntasks=1
+#SBATCH -c 16
+#SBATCH --cpus-per-task=16
 #SBATCH -t 78:00:00
 #SBATCH -J OTU_pipeline
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user biancasarcani@gmail.com
 #SBATCH --output=%x.%j.out
-
 set -euo pipefail
 
 ######## HANDLE ARGUMENTS ######## 
@@ -66,7 +66,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
 
     echo "================== FastQC 1 =======================" 
 
-    fastqc "$sample" -o "QC_${name}" -t 8
+    fastqc "$sample" -o "QC_${name}" -t 16
 
     echo "===================================================" 
     echo "============= 1. Trimming adapters ================" 
@@ -86,7 +86,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
 
     echo "================== FastQC 2 =======================" 
 
-    fastqc "intermediate_${name}/01_trimmed_reads.fastq.gz" -o "QC_${name}" -t 8
+    fastqc "intermediate_${name}/01_trimmed_reads.fastq.gz" -o "QC_${name}" -t 16
 
     echo "===================================================" 
     echo "============= 2.  Quality filtering ===============" 
@@ -95,6 +95,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
 
     vsearch \
     --fastq_filter "intermediate_${name}/01_trimmed_reads.fastq.gz" \
+    --fastq_qmax 93 \
     --fastq_maxee 12 \
     --fastq_minlen 1000 \
     --fastq_maxlen 2400 \
@@ -103,7 +104,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
 
     echo "================== FastQC 3 =======================" 
 
-    fastqc "intermediate_${name}/02_q_filtered_reads.fastq" -o "QC_${name}" -t 8
+    fastqc "intermediate_${name}/02_q_filtered_reads.fastq" -o "QC_${name}" -t 16
 
     echo "===================================================" 
     echo "====== 3. Deduplication. Abundance counting. ======" 
@@ -121,7 +122,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
     echo "================== FastQC 4 =======================" 
 
 
-    fastqc "intermediate_${name}/03_dereplicated_reads.fastq" -o "QC_${name}" -t 8
+    fastqc "intermediate_${name}/03_dereplicated_reads.fastq" -o "QC_${name}" -t 16
 
     echo "================== MultiQC =======================" 
 
@@ -151,7 +152,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
     -i "intermediate_${name}/nonchimeras.fasta" \
     -o "intermediate_${name}/ITSx_out" \
     -t F \
-    --cpu 8 \
+    --cpu 16 \
     -E 1e-2 \
     --partial 50 \
     --only_full T \
@@ -175,7 +176,7 @@ for sample in "$TMPDIR"/*.fastq.gz; do
     --centroids "${name}_OTU_centroids.fasta" \
     --consout "${name}_OTU_consensus.fasta" \
     --sizeout \
-    --threads 8 \
+    --threads 16 \
     --qmask dust 
 
     cp "${name}_OTU_centroids.fasta" "$OUTPUTDIR/OTUs"
