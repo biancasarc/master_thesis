@@ -108,7 +108,6 @@ def taxonomy_corrector(tax_string):
 #  {'multiple_genera': ['SH1284818.10FU', 'SH1323040.10FU'], 'multiple_sp': ['SH1327650.10FU']}
 
 def sh_conflicts_tracker(sh_species):
-    # Step 2: Identifying SHs with multiple species/generas (problematic SHs)
     problematic_sh={'multiple_genera':[], 'multiple_sp':[]}
     for sh, species_list in sh_species.items():
         genera=[s.split('_')[0] for s in species_list]
